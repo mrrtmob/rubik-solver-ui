@@ -4,6 +4,8 @@ A fully working Rubik's Cube solver web app demonstrating how to use the [`rubik
 
 ## Live Demo
 
+[Demo](https://rubik-solver-ui.vercel.app/)
+
 Open `index.html` in any modern browser (or serve it with a local server).
 
 ```bash
@@ -60,10 +62,10 @@ rubik-app/
 
 ## Dependencies
 
-| Package | Purpose | How loaded |
-|---|---|---|
+| Package                                                     | Purpose             | How loaded                      |
+| ----------------------------------------------------------- | ------------------- | ------------------------------- |
 | [`rubik-solver`](https://www.npmjs.com/package/rubik-solver) | Cube solving engine | `esm.sh` CDN (dynamic import) |
-| [Three.js r128](https://threejs.org/) | 3D rendering | `cdnjs` CDN script tag |
+| [Three.js r128](https://threejs.org/)                          | 3D rendering        | `cdnjs` CDN script tag        |
 
 No bundler, no build step — just open in a browser.
 
@@ -101,8 +103,10 @@ solve(cube, 22);
 ## Library
 
 The solver engine lives at:
+
 - **npm**: [rubik-solver](https://www.npmjs.com/package/rubik-solver)
 - **GitHub**: [mrrtmob/rubik-solver](https://github.com/mrrtmob/rubik-solver)
 
 ## License
+
 MIT
