@@ -5,7 +5,7 @@ import { FACE_COLORS, FACE_ORDER } from './ui.js';
 // ==========================================
 let scene, camera, renderer, cubeGroup;
 let isDragging = false, prevMouse = { x: 0, y: 0 };
-let spherical = { theta: Math.PI / 6, phi: Math.PI / 3, radius: 7 };
+let spherical = { theta: Math.PI / 6, phi: Math.PI / 3, radius: 9 };
 let cubies = [];
 let animQueue = [];
 let animBusy = false;
@@ -108,7 +108,7 @@ function updateCameraPosition() {
 }
 
 export function resetCamera() {
-  spherical = { theta: Math.PI / 6, phi: Math.PI / 3, radius: 7 };
+  spherical = { theta: Math.PI / 6, phi: Math.PI / 3, radius: 9 };
   updateCameraPosition();
 }
 
