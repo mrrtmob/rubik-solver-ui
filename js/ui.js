@@ -2,13 +2,13 @@
 // COLOR DEFINITIONS
 // ==========================================
 export const FACE_COLORS = {
-  U: { css: '#ffffff', hex: 0xffffff, name: 'White'  },
-  R: { css: '#c41e3a', hex: 0xc41e3a, name: 'Red'    },
-  F: { css: '#009b48', hex: 0x009b48, name: 'Green'  },
+  U: { css: '#ffffff', hex: 0xffffff, name: 'White' },
+  R: { css: '#c41e3a', hex: 0xc41e3a, name: 'Red' },
+  F: { css: '#009b48', hex: 0x009b48, name: 'Green' },
   D: { css: '#ffd500', hex: 0xffd500, name: 'Yellow' },
   L: { css: '#ff5800', hex: 0xff5800, name: 'Orange' },
-  B: { css: '#0051a2', hex: 0x0051a2, name: 'Blue'   },
-  X: { css: '#222222', hex: 0x222222, name: 'Empty'  },
+  B: { css: '#0051a2', hex: 0x0051a2, name: 'Blue' },
+  X: { css: '#222222', hex: 0x222222, name: 'Empty' },
 };
 
 export const FACE_ORDER = ['U', 'R', 'F', 'D', 'L', 'B'];

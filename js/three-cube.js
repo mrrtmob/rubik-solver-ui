@@ -129,11 +129,11 @@ function buildCubies() {
       for (let z = -1; z <= 1; z++) {
         const geo = new THREE.BoxGeometry(size, size, size);
         const mats = [
-          new THREE.MeshLambertMaterial({ color: x === 1  ? CUBIE_COLORS.R : CUBIE_COLORS.inner }),
+          new THREE.MeshLambertMaterial({ color: x === 1 ? CUBIE_COLORS.R : CUBIE_COLORS.inner }),
           new THREE.MeshLambertMaterial({ color: x === -1 ? CUBIE_COLORS.L : CUBIE_COLORS.inner }),
-          new THREE.MeshLambertMaterial({ color: y === 1  ? CUBIE_COLORS.U : CUBIE_COLORS.inner }),
+          new THREE.MeshLambertMaterial({ color: y === 1 ? CUBIE_COLORS.U : CUBIE_COLORS.inner }),
           new THREE.MeshLambertMaterial({ color: y === -1 ? CUBIE_COLORS.D : CUBIE_COLORS.inner }),
-          new THREE.MeshLambertMaterial({ color: z === 1  ? CUBIE_COLORS.F : CUBIE_COLORS.inner }),
+          new THREE.MeshLambertMaterial({ color: z === 1 ? CUBIE_COLORS.F : CUBIE_COLORS.inner }),
           new THREE.MeshLambertMaterial({ color: z === -1 ? CUBIE_COLORS.B : CUBIE_COLORS.inner }),
         ];
         const mesh = new THREE.Mesh(geo, mats);
@@ -167,12 +167,12 @@ export function setColorsFromString(str) {
     const mats = mesh.material;
     const c = (f, r, col) => hexForFace(faces[f][r * 3 + col]);
 
-    mats[0].color.setHex(gx === 1  ? c('R', 1 - gy, 1 - gz)  : CUBIE_COLORS.inner);
-    mats[1].color.setHex(gx === -1 ? c('L', 1 - gy, gz + 1)  : CUBIE_COLORS.inner);
-    mats[2].color.setHex(gy === 1  ? c('U', gz + 1, gx + 1)  : CUBIE_COLORS.inner);
-    mats[3].color.setHex(gy === -1 ? c('D', 1 - gz, gx + 1)  : CUBIE_COLORS.inner);
-    mats[4].color.setHex(gz === 1  ? c('F', 1 - gy, gx + 1)  : CUBIE_COLORS.inner);
-    mats[5].color.setHex(gz === -1 ? c('B', 1 - gy, 1 - gx)  : CUBIE_COLORS.inner);
+    mats[0].color.setHex(gx === 1 ? c('R', 1 - gy, 1 - gz) : CUBIE_COLORS.inner);
+    mats[1].color.setHex(gx === -1 ? c('L', 1 - gy, gz + 1) : CUBIE_COLORS.inner);
+    mats[2].color.setHex(gy === 1 ? c('U', gz + 1, gx + 1) : CUBIE_COLORS.inner);
+    mats[3].color.setHex(gy === -1 ? c('D', 1 - gz, gx + 1) : CUBIE_COLORS.inner);
+    mats[4].color.setHex(gz === 1 ? c('F', 1 - gy, gx + 1) : CUBIE_COLORS.inner);
+    mats[5].color.setHex(gz === -1 ? c('B', 1 - gy, 1 - gx) : CUBIE_COLORS.inner);
   });
 }
 
@@ -184,18 +184,18 @@ function hexForFace(fchar) {
 // MOVE ANIMATION
 // ==========================================
 const MOVE_DEF = {
-  U: [0, 1, 0, -Math.PI / 2], D: [0, 1, 0,  Math.PI / 2],
-  R: [1, 0, 0, -Math.PI / 2], L: [1, 0, 0,  Math.PI / 2],
-  F: [0, 0, 1, -Math.PI / 2], B: [0, 0, 1,  Math.PI / 2],
+  U: [0, 1, 0, -Math.PI / 2], D: [0, 1, 0, Math.PI / 2],
+  R: [1, 0, 0, -Math.PI / 2], L: [1, 0, 0, Math.PI / 2],
+  F: [0, 0, 1, -Math.PI / 2], B: [0, 0, 1, Math.PI / 2],
 };
 
 function faceSelector(face) {
   switch (face) {
-    case 'U': return c => c.userData.gy ===  1;
+    case 'U': return c => c.userData.gy === 1;
     case 'D': return c => c.userData.gy === -1;
-    case 'R': return c => c.userData.gx ===  1;
+    case 'R': return c => c.userData.gx === 1;
     case 'L': return c => c.userData.gx === -1;
-    case 'F': return c => c.userData.gz ===  1;
+    case 'F': return c => c.userData.gz === 1;
     case 'B': return c => c.userData.gz === -1;
   }
 }
@@ -203,12 +203,12 @@ function faceSelector(face) {
 function cwStep(c, face) {
   const { gx, gy, gz } = c.userData;
   switch (face) {
-    case 'U': c.userData.gx = -gz; c.userData.gz =  gx; break;
-    case 'D': c.userData.gx =  gz; c.userData.gz = -gx; break;
-    case 'R': c.userData.gy =  gz; c.userData.gz = -gy; break;
-    case 'L': c.userData.gy = -gz; c.userData.gz =  gy; break;
-    case 'F': c.userData.gx =  gy; c.userData.gy = -gx; break;
-    case 'B': c.userData.gx = -gy; c.userData.gy =  gx; break;
+    case 'U': c.userData.gx = -gz; c.userData.gz = gx; break;
+    case 'D': c.userData.gx = gz; c.userData.gz = -gx; break;
+    case 'R': c.userData.gy = gz; c.userData.gz = -gy; break;
+    case 'L': c.userData.gy = -gz; c.userData.gz = gy; break;
+    case 'F': c.userData.gx = gy; c.userData.gy = -gx; break;
+    case 'B': c.userData.gx = -gy; c.userData.gy = gx; break;
   }
 }
 
@@ -237,13 +237,13 @@ function cancelAnimations() {
 
 function applyMoveToThree(move, animated, onDone) {
   const face = move[0];
-  const mod  = move.length > 1 ? move[1] : '';
-  const def  = MOVE_DEF[face];
+  const mod = move.length > 1 ? move[1] : '';
+  const def = MOVE_DEF[face];
   if (!def) { if (onDone) onDone(); return; }
 
-  const axis     = new THREE.Vector3(def[0], def[1], def[2]);
-  const cwAngle  = def[3];
-  const angle    = mod === '2' ? cwAngle * 2 : mod === "'" ? -cwAngle : cwAngle;
+  const axis = new THREE.Vector3(def[0], def[1], def[2]);
+  const cwAngle = def[3];
+  const angle = mod === '2' ? cwAngle * 2 : mod === "'" ? -cwAngle : cwAngle;
   const affected = cubies.filter(faceSelector(face));
 
   if (!animated) {
@@ -259,7 +259,7 @@ function applyMoveToThree(move, animated, onDone) {
   const pivot = new THREE.Group();
   cubeGroup.add(pivot);
   affected.forEach(c => {
-    const savedPos  = c.position.clone();
+    const savedPos = c.position.clone();
     const savedQuat = c.quaternion.clone();
     cubeGroup.remove(c);
     c.position.copy(savedPos);
@@ -270,7 +270,7 @@ function applyMoveToThree(move, animated, onDone) {
   const duration = Math.min((window.__getSpeed?.() ?? 600) * 0.6, 380);
   const startTime = performance.now();
   const startQ = new THREE.Quaternion();
-  const endQ   = new THREE.Quaternion().setFromAxisAngle(axis, angle);
+  const endQ = new THREE.Quaternion().setFromAxisAngle(axis, angle);
 
   function tick(now) {
     const t = Math.min((now - startTime) / duration, 1);

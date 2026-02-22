@@ -65,7 +65,7 @@ function onPaint(idx, cell) {
 // ==========================================
 // SCRAMBLE & RESET
 // ==========================================
-window.resetCube = function() {
+window.resetCube = function () {
   facelets = defaultStr().split('');
   currentCube = new Cube();
   solutionMoves = []; currentStep = -1;
@@ -79,7 +79,7 @@ window.resetCube = function() {
   refreshThree();
 };
 
-window.clearCube = function() {
+window.clearCube = function () {
   facelets = Array(54).fill('X');
   FACE_ORDER.forEach((f, i) => { facelets[i * 9 + 4] = f; });
   buildFaceNet(facelets, onPaint);
@@ -93,7 +93,7 @@ window.clearCube = function() {
   refreshThree();
 };
 
-window.applyScramble = function() {
+window.applyScramble = function () {
   const alg = document.getElementById('scramble-input').value.trim();
   if (!alg) return;
   window.resetCube();
@@ -110,17 +110,17 @@ window.applyScramble = function() {
   }
 };
 
-window.randomScramble = function() {
+window.randomScramble = function () {
   const scr = scramble();
   document.getElementById('scramble-input').value = scr;
   window.applyScramble();
 };
 
-window.copyFaceletString = function() {
-  navigator.clipboard.writeText(document.getElementById('facelet-string').value).catch(() => {});
+window.copyFaceletString = function () {
+  navigator.clipboard.writeText(document.getElementById('facelet-string').value).catch(() => { });
 };
 
-window.loadFaceletString = function() {
+window.loadFaceletString = function () {
   const val = document.getElementById('facelet-string').value.trim();
   if (val.length !== 54) { showError('String must be exactly 54 characters.'); return; }
   try {
@@ -145,7 +145,7 @@ window.loadFaceletString = function() {
 // ==========================================
 // SOLVER
 // ==========================================
-window.solveCube = function(autoPlay = false) {
+window.solveCube = function (autoPlay = false) {
   syncCubeFromFacelets();
   if (!currentCube) { showError('Invalid cube state.'); return; }
 
@@ -199,7 +199,7 @@ window.solveCube = function(autoPlay = false) {
 // ==========================================
 // PLAYBACK
 // ==========================================
-window.togglePlay = function() {
+window.togglePlay = function () {
   if (playInterval) {
     stopPlay();
   } else {
@@ -223,7 +223,7 @@ function stopPlay() {
   setPlayBtn('▶ Play');
 }
 
-window.stepForward = function(onDone) {
+window.stepForward = function (onDone) {
   if (solutionMoves.length === 0 || currentStep >= solutionMoves.length - 1) {
     if (onDone) onDone(); return;
   }
@@ -237,7 +237,7 @@ window.stepForward = function(onDone) {
 // Also expose non-window version for internal use
 function stepForward(onDone) { window.stepForward(onDone); }
 
-window.stepBack = function() {
+window.stepBack = function () {
   if (solutionMoves.length === 0 || currentStep < 0) return;
   const inv = Cube.inverse(solutionMoves[currentStep]);
   currentStep--;
@@ -272,7 +272,7 @@ function applyMoveToDisplay(move, onDone) {
 // ==========================================
 // SPEED SLIDER
 // ==========================================
-document.getElementById('speed-slider').addEventListener('input', function() {
+document.getElementById('speed-slider').addEventListener('input', function () {
   document.getElementById('speed-label').textContent = (this.value / 1000).toFixed(1) + 's';
   if (playInterval) { stopPlay(); window.togglePlay(); }
 });
@@ -290,15 +290,16 @@ window.addEventListener('load', () => {
 
   import('https://esm.sh/rubik-solver')
     .then(module => {
-      Cube       = module.Cube;
+      Cube = module.Cube;
       initSolver = module.initSolver;
-      solve      = module.solve;
-      scramble   = module.scramble;
+      solve = module.solve;
+      scramble = module.scramble;
 
-      buildPalette(selectedColor, key => {
+      function onPaletteSelect(key) {
         selectedColor = key;
-        buildPalette(selectedColor, arguments.callee);
-      });
+        buildPalette(selectedColor, onPaletteSelect);
+      }
+      buildPalette(selectedColor, onPaletteSelect);
       buildFaceNet(facelets, onPaint);
       currentCube = new Cube();
       updateFaceletStringInput(facelets);

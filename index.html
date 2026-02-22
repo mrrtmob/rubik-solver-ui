@@ -1,205 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>Rubik's Cube Solver</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<title>Rubik's Cube Solver</title>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<header>
+			<h1>RUBIK'S SOLVER</h1>
+			<a href="https://github.com/mrrtmob/rubik-solver" target="_blank" class="github-link" title="GitHub">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+					<path
+						d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"
+					/>
+				</svg>
+				<span>GitHub</span>
+			</a>
+		</header>
 
-<header>
-  <h1>RUBIK'S SOLVER</h1>
-  <a href="https://github.com/mrrtmob/rubik-solver" target="_blank" class="github-link" title="GitHub">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
-    </svg>
-    <span>GitHub</span>
-  </a>
-</header>
+		<div class="layout">
+			<!-- LEFT PANEL -->
+			<div class="left-panel">
+				<!-- SCRAMBLE (setup tab) -->
+				<div class="section m-visible" data-s="scramble">
+					<div class="section-header">
+						<div class="section-label">Scramble</div>
+					</div>
+					<div class="scramble-row">
+						<input
+							type="text"
+							id="scramble-input"
+							placeholder="R U R' U' F2 L D ..."
+							autocomplete="off"
+							autocorrect="off"
+							autocapitalize="off"
+							spellcheck="false"
+						/>
+						<button class="btn" onclick="applyScramble()">Apply</button>
+						<button class="btn" onclick="randomScramble()">Random</button>
+					</div>
+				</div>
 
-<div class="layout">
-  <!-- LEFT PANEL -->
-  <div class="left-panel">
+				<!-- PAINT (setup tab) -->
+				<div class="section m-visible" data-s="paint">
+					<div class="section-header">
+						<div class="section-label">Paint Facelets</div>
+						<div class="header-actions">
+							<button class="btn mini" onclick="resetCube()">Reset</button>
+							<button class="btn mini danger" onclick="clearCube()">Clear</button>
+						</div>
+					</div>
+					<div class="color-palette" id="palette"></div>
+					<div class="face-net-wrapper">
+						<div class="face-net" id="face-net"></div>
+					</div>
+					<!-- Mobile-only Solve CTA -->
+					<button class="btn primary setup-solve-btn" onclick="setupSolveAndSwitch()">SOLVE →</button>
+				</div>
 
-    <!-- SCRAMBLE (setup tab) -->
-    <div class="section m-visible" data-s="scramble">
-      <div class="section-header">
-        <div class="section-label">Scramble</div>
-      </div>
-      <div class="scramble-row">
-        <input type="text" id="scramble-input" placeholder="R U R' U' F2 L D ..."
-          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-        <button class="btn" onclick="applyScramble()">Apply</button>
-        <button class="btn" onclick="randomScramble()">Random</button>
-      </div>
-    </div>
+				<!-- SOLVE (solve tab) -->
+				<div class="section solver-section" data-s="solve">
+					<div class="section-header">
+						<div class="section-label">
+							Solver Output
+							<span
+								id="solve-time"
+								style="color: var(--muted); text-transform: none; font-size: 0.55rem; margin-left: 8px"
+							></span>
+						</div>
+						<div class="header-actions">
+							<button class="btn mini primary" id="solve-btn" onclick="solveCube()">SOLVE</button>
+						</div>
+					</div>
+					<div id="solution-box">No solution yet. Paint or scramble the cube, then hit SOLVE.</div>
+					<div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+				</div>
 
-    <!-- PAINT (setup tab) -->
-    <div class="section m-visible" data-s="paint">
-      <div class="section-header">
-        <div class="section-label">Paint Facelets</div>
-        <div class="header-actions">
-          <button class="btn mini" onclick="resetCube()">Reset</button>
-          <button class="btn mini danger" onclick="clearCube()">Clear</button>
-        </div>
-      </div>
-      <div class="color-palette" id="palette"></div>
-      <div class="face-net-wrapper">
-        <div class="face-net" id="face-net"></div>
-      </div>
-      <!-- Mobile-only Solve CTA -->
-      <button class="btn primary setup-solve-btn" onclick="setupSolveAndSwitch()">SOLVE →</button>
-    </div>
+				<!-- PLAYBACK (solve tab) -->
+				<div class="section" data-s="playback">
+					<div class="section-header">
+						<div class="section-label">Playback</div>
+						<span class="step-counter" id="step-counter">— / —</span>
+					</div>
+					<div class="playback-controls">
+						<button class="btn" onclick="stepBack()">◀◀ Back</button>
+						<button class="btn primary" id="play-btn" onclick="togglePlay()">▶ Play</button>
+						<button class="btn" onclick="stepForward()">Next ▶▶</button>
+					</div>
+					<div class="speed-row">
+						<span>SPEED</span>
+						<input type="range" id="speed-slider" min="100" max="1200" value="600" step="100" />
+						<span id="speed-label">0.6s</span>
+					</div>
+				</div>
 
-    <!-- SOLVE (solve tab) -->
-    <div class="section solver-section" data-s="solve">
-      <div class="section-header">
-        <div class="section-label">
-          Solver Output
-          <span id="solve-time" style="color:var(--muted);text-transform:none;font-size:0.55rem;margin-left:8px;"></span>
-        </div>
-        <div class="header-actions">
-          <button class="btn mini primary" id="solve-btn" onclick="solveCube()">SOLVE</button>
-        </div>
-      </div>
-      <div id="solution-box">No solution yet. Paint or scramble the cube, then hit SOLVE.</div>
-      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-    </div>
+				<!-- FACELET STRING (string tab) -->
+				<div class="section" data-s="facelet">
+					<div class="section-header">
+						<div class="section-label">Facelet String</div>
+						<div class="header-actions">
+							<button class="btn mini" onclick="copyFaceletString()">Copy</button>
+							<button class="btn mini" onclick="loadFaceletString()">Load</button>
+						</div>
+					</div>
+					<input
+						type="text"
+						id="facelet-string"
+						placeholder="54 chars: UUUUUUUUURRRR..."
+						style="width: 100%"
+						autocomplete="off"
+						autocorrect="off"
+						autocapitalize="off"
+						spellcheck="false"
+					/>
+				</div>
+			</div>
 
-    <!-- PLAYBACK (solve tab) -->
-    <div class="section" data-s="playback">
-      <div class="section-header">
-        <div class="section-label">Playback</div>
-        <span class="step-counter" id="step-counter">— / —</span>
-      </div>
-      <div class="playback-controls">
-        <button class="btn" onclick="stepBack()">◀◀ Back</button>
-        <button class="btn primary" id="play-btn" onclick="togglePlay()">▶ Play</button>
-        <button class="btn" onclick="stepForward()">Next ▶▶</button>
-      </div>
-      <div class="speed-row">
-        <span>SPEED</span>
-        <input type="range" id="speed-slider" min="100" max="1200" value="600" step="100">
-        <span id="speed-label">0.6s</span>
-      </div>
-    </div>
+			<!-- RIGHT PANEL: 3D Cube -->
+			<div class="right-panel">
+				<canvas id="three-canvas"></canvas>
+				<div class="canvas-overlay">
+					<span class="hint-text">Drag to rotate</span>
+					<div class="header-actions" style="margin-top: 4px">
+						<button class="btn mini" onclick="resetCamera()">Reset View</button>
+					</div>
+				</div>
+				<div class="loading-overlay" id="loading-overlay">
+					<div class="spinner"></div>
+					<div class="loading-text">INITIALIZING ENGINE</div>
+				</div>
+			</div>
+		</div>
 
-    <!-- FACELET STRING (string tab) -->
-    <div class="section" data-s="facelet">
-      <div class="section-header">
-        <div class="section-label">Facelet String</div>
-        <div class="header-actions">
-          <button class="btn mini" onclick="copyFaceletString()">Copy</button>
-          <button class="btn mini" onclick="loadFaceletString()">Load</button>
-        </div>
-      </div>
-      <input type="text" id="facelet-string" placeholder="54 chars: UUUUUUUUURRRR..." style="width:100%;"
-        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-    </div>
+		<!-- Mobile Tab Bar (bottom nav) -->
+		<nav class="mobile-tab-bar" id="mobile-tab-bar">
+			<div class="mobile-tab-bar-inner">
+				<button class="m-tab active" data-tab="setup" onclick="switchTab('setup')">
+					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<rect x="3" y="3" width="7" height="7" />
+						<rect x="14" y="3" width="7" height="7" />
+						<rect x="14" y="14" width="7" height="7" />
+						<rect x="3" y="14" width="7" height="7" />
+					</svg>
+					Setup
+				</button>
 
-  </div>
+				<button class="m-tab" data-tab="solve" onclick="switchTab('solve')">
+					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<circle cx="12" cy="12" r="10" />
+						<polyline points="12 6 12 12 16 14" />
+					</svg>
+					Solve
+				</button>
 
-  <!-- RIGHT PANEL: 3D Cube -->
-  <div class="right-panel">
-    <canvas id="three-canvas"></canvas>
-    <div class="canvas-overlay">
-      <span class="hint-text">Drag to rotate</span>
-      <div class="header-actions" style="margin-top:4px;">
-        <button class="btn mini" onclick="resetCamera()">Reset View</button>
-      </div>
-    </div>
-    <div class="loading-overlay" id="loading-overlay">
-      <div class="spinner"></div>
-      <div class="loading-text">INITIALIZING ENGINE</div>
-    </div>
-  </div>
-</div>
+				<button class="m-tab" data-tab="facelet" onclick="switchTab('facelet')">
+					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+						<polyline points="14 2 14 8 20 8" />
+						<line x1="16" y1="13" x2="8" y2="13" />
+						<line x1="16" y1="17" x2="8" y2="17" />
+						<polyline points="10 9 9 9 8 9" />
+					</svg>
+					String
+				</button>
+			</div>
+		</nav>
 
-<!-- Mobile Tab Bar (bottom nav) -->
-<nav class="mobile-tab-bar" id="mobile-tab-bar">
-  <div class="mobile-tab-bar-inner">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+		<script src="js/app.js" type="module"></script>
+		<script>
+			function setupSolveAndSwitch() {
+				switchTab("solve");
+				window.solveCube?.();
+			}
 
-    <button class="m-tab active" data-tab="setup" onclick="switchTab('setup')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-      </svg>
-      Setup
-    </button>
-
-    <button class="m-tab" data-tab="solve" onclick="switchTab('solve')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="10"/>
-        <polyline points="12 6 12 12 16 14"/>
-      </svg>
-      Solve
-    </button>
-
-    <button class="m-tab" data-tab="facelet" onclick="switchTab('facelet')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-        <polyline points="14 2 14 8 20 8"/>
-        <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
-        <polyline points="10 9 9 9 8 9"/>
-      </svg>
-      String
-    </button>
-
-  </div>
-</nav>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="js/app.js" type="module"></script>
-<script>
-  function setupSolveAndSwitch() {
-    switchTab('solve');
-    window.solveCube?.();
-  }
-
-  /* ---- Tab definitions ---- */
-  /*
+			/* ---- Tab definitions ---- */
+			/*
     setup  → sections: scramble, paint
     solve  → sections: solve, playback
     facelet → sections: facelet
   */
-  const TAB_SECTIONS = {
-    setup:   ['scramble', 'paint'],
-    solve:   ['solve', 'playback'],
-    facelet: ['facelet'],
-  };
+			const TAB_SECTIONS = {
+				setup: ["scramble", "paint"],
+				solve: ["solve", "playback"],
+				facelet: ["facelet"],
+			};
 
-  function switchTab(tab) {
-    /* Update tab button states */
-    document.querySelectorAll('.m-tab').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.tab === tab);
-    });
+			function switchTab(tab) {
+				/* Update tab button states */
+				document.querySelectorAll(".m-tab").forEach((btn) => {
+					btn.classList.toggle("active", btn.dataset.tab === tab);
+				});
 
-    /* Show / hide sections */
-    document.querySelectorAll('.section[data-s]').forEach(sec => {
-      const active = (TAB_SECTIONS[tab] || []).includes(sec.dataset.s);
-      sec.classList.toggle('m-visible', active);
-    });
+				/* Show / hide sections */
+				document.querySelectorAll(".section[data-s]").forEach((sec) => {
+					const active = (TAB_SECTIONS[tab] || []).includes(sec.dataset.s);
+					sec.classList.toggle("m-visible", active);
+				});
 
-    /* Scroll left-panel to top when switching */
-    document.querySelector('.left-panel').scrollTop = 0;
-  }
+				/* Scroll left-panel to top when switching */
+				document.querySelector(".left-panel").scrollTop = 0;
+			}
 
-  /* On desktop (>900px) always show ALL sections */
-  const mq = window.matchMedia('(max-width: 900px)');
-  function handleMQ(e) {
-    if (!e.matches) {
-      document.querySelectorAll('.section[data-s]').forEach(s => s.classList.add('m-visible'));
-    } else {
-      /* Re-apply current active tab */
-      const active = document.querySelector('.m-tab.active')?.dataset.tab || 'setup';
-      switchTab(active);
-    }
-  }
-  mq.addEventListener('change', handleMQ);
-  handleMQ(mq);
-</script>
-
-</body>
+			/* On desktop (>900px) always show ALL sections */
+			const mq = window.matchMedia("(max-width: 900px)");
+			function handleMQ(e) {
+				if (!e.matches) {
+					document.querySelectorAll(".section[data-s]").forEach((s) => s.classList.add("m-visible"));
+				} else {
+					/* Re-apply current active tab */
+					const active = document.querySelector(".m-tab.active")?.dataset.tab || "setup";
+					switchTab(active);
+				}
+			}
+			mq.addEventListener("change", handleMQ);
+			handleMQ(mq);
+		</script>
+	</body>
 </html>
