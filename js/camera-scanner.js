@@ -831,31 +831,9 @@ function showTransition(from, to) {
 }
 
 function applyScannedFaces() {
-  // FACE_ORDER = [U,R,F,D,L,B] — correct order for the solver.
-  // Each scannedFaces[f] has 9 classified color-key chars e.g. ['U','R','U',...].
   const facelets = FACE_ORDER.map(f =>
     (scannedFaces[f] || Array(9).fill('X')).join('')
   ).join('');
-
-  // Validate: must be 54 chars of only valid face keys
-  if (!/^[URFDLB]{54}$/.test(facelets)) {
-    showError('Some stickers unrecognised (grey dots). Retake those faces in better lighting.');
-    const to = document.getElementById('transition-overlay');
-    if (to) to.classList.remove('visible');
-    return;
-  }
-
-  // Each of the 6 face letters must appear exactly 9 times
-  const counts = {};
-  for (const ch of facelets) counts[ch] = (counts[ch] || 0) + 1;
-  const bad = Object.entries(counts).filter(([, v]) => v !== 9).map(([k]) => k);
-  if (bad.length) {
-    showError('Color count wrong for: ' + bad.join(', ') + '. Retake those faces.');
-    const to = document.getElementById('transition-overlay');
-    if (to) to.classList.remove('visible');
-    return;
-  }
-
   destroyScanner();
   if (onFaceScannedCallback) onFaceScannedCallback(facelets);
 }

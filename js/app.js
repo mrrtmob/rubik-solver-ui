@@ -321,35 +321,19 @@ window.addEventListener('load', () => {
 
 window.openScanner = function () {
   initScanner((faceletString) => {
-    try {
-      // Try to parse — rubik-solver validates structure
-      const cube = Cube.fromString(faceletString);
-      const v = cube.verify();
-      if (v !== true) {
-        // Show error on the main UI (scanner is already closed at this point)
-        showError('Scan error: ' + v + ' — try rescanning in better lighting.');
-        return;
-      }
-
-      // Load the scanned state into the app
-      facelets = faceletString.split('');
-      currentCube = cube;
-      buildFaceNet(facelets, onPaint);
-      updateFaceletStringInput(facelets);
-      stopPlay();
-      solutionMoves = []; currentStep = -1;
-      clearSolutionBox();
-      updateStepCounter(-1, 0);
-      updateProgress(-1, 0);
-      resetThreeCubeState();
-      refreshThree();
-
-      // On mobile: go to setup tab so user sees the painted cube
-      if (window.matchMedia('(max-width: 900px)').matches) {
-        switchTab('setup');
-      }
-    } catch (e) {
-      showError('Scan error: ' + e.message);
+    facelets = faceletString.split('');
+    try { currentCube = Cube.fromString(faceletString); } catch { currentCube = null; }
+    buildFaceNet(facelets, onPaint);
+    updateFaceletStringInput(facelets);
+    stopPlay();
+    solutionMoves = []; currentStep = -1;
+    clearSolutionBox();
+    updateStepCounter(-1, 0);
+    updateProgress(-1, 0);
+    resetThreeCubeState();
+    refreshThree();
+    if (window.matchMedia('(max-width: 900px)').matches) {
+      switchTab('setup');
     }
   });
 };
