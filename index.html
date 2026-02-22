@@ -48,6 +48,13 @@
 					<div class="section-header">
 						<div class="section-label">Paint Facelets</div>
 						<div class="header-actions">
+							<!-- Desktop scan button (hidden on mobile, mobile uses tab bar) -->
+							<button class="btn mini scan-desktop-btn" onclick="openScanner()">
+								<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px;vertical-align:middle">
+									<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+									<circle cx="12" cy="13" r="4"/>
+								</svg>Scan
+							</button>
 							<button class="btn mini" onclick="resetCube()">Reset</button>
 							<button class="btn mini danger" onclick="clearCube()">Clear</button>
 						</div>
@@ -147,6 +154,15 @@
 					Setup
 				</button>
 
+				<!-- SCAN TAB -->
+				<button class="m-tab m-tab--scan" data-tab="scan" onclick="openScanner()">
+					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+						<circle cx="12" cy="13" r="4"/>
+					</svg>
+					Scan
+				</button>
+
 				<button class="m-tab" data-tab="solve" onclick="switchTab('solve')">
 					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<circle cx="12" cy="12" r="10" />
@@ -177,30 +193,25 @@
 			}
 
 			/* ---- Tab definitions ---- */
-			/*
-    setup  → sections: scramble, paint
-    solve  → sections: solve, playback
-    facelet → sections: facelet
-  */
 			const TAB_SECTIONS = {
-				setup: ["scramble", "paint"],
-				solve: ["solve", "playback"],
+				setup:   ["scramble", "paint"],
+				solve:   ["solve", "playback"],
 				facelet: ["facelet"],
 			};
 
 			function switchTab(tab) {
-				/* Update tab button states */
+				/* "scan" tab opens the camera overlay — no section switching needed */
+				if (tab === "scan") return;
+
 				document.querySelectorAll(".m-tab").forEach((btn) => {
 					btn.classList.toggle("active", btn.dataset.tab === tab);
 				});
 
-				/* Show / hide sections */
 				document.querySelectorAll(".section[data-s]").forEach((sec) => {
 					const active = (TAB_SECTIONS[tab] || []).includes(sec.dataset.s);
 					sec.classList.toggle("m-visible", active);
 				});
 
-				/* Scroll left-panel to top when switching */
 				document.querySelector(".left-panel").scrollTop = 0;
 			}
 
@@ -210,7 +221,6 @@
 				if (!e.matches) {
 					document.querySelectorAll(".section[data-s]").forEach((s) => s.classList.add("m-visible"));
 				} else {
-					/* Re-apply current active tab */
 					const active = document.querySelector(".m-tab.active")?.dataset.tab || "setup";
 					switchTab(active);
 				}

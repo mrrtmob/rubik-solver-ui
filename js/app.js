@@ -11,6 +11,8 @@ import {
   setColorsFromString, enqueueMove,
 } from './three-cube.js';
 
+import { initScanner } from './camera-scanner.js';
+
 // ==========================================
 // LOAD rubik-solver FROM CDN
 // ==========================================
@@ -316,3 +318,29 @@ window.addEventListener('load', () => {
       document.querySelector('.loading-text').textContent = 'ERROR LOADING ENGINE';
     });
 });
+
+window.openScanner = function () {
+  initScanner((faceletString) => {
+    try {
+      const cube = Cube.fromString(faceletString);
+      const v = cube.verify();
+      if (v !== true) { showError(v); return; }
+      facelets = faceletString.split('');
+      currentCube = cube;
+      buildFaceNet(facelets, onPaint);
+      updateFaceletStringInput(facelets);
+      stopPlay();
+      solutionMoves = []; currentStep = -1;
+      clearSolutionBox();
+      updateStepCounter(-1, 0);
+      updateProgress(-1, 0);
+      resetThreeCubeState();
+      refreshThree();
+      if (window.matchMedia('(max-width: 900px)').matches) {
+        switchTab('setup');
+      }
+    } catch (e) {
+      showError('Scanner error: ' + e.message);
+    }
+  });
+};

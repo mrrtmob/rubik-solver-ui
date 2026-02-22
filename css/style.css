@@ -36,7 +36,9 @@ body::before {
 
 ::selection { background: #444; color: #fff; }
 
-/* HEADER */
+/* ============================================================
+   HEADER
+   ============================================================ */
 header {
   flex: 0 0 auto;
   position: relative;
@@ -70,7 +72,9 @@ header h1 {
 }
 .github-link:hover { color: var(--accent); border-color: var(--accent); }
 
-/* LAYOUT */
+/* ============================================================
+   LAYOUT
+   ============================================================ */
 .layout {
   flex: 1;
   min-height: 0;
@@ -79,7 +83,9 @@ header h1 {
   z-index: 1;
 }
 
-/* LEFT PANEL */
+/* ============================================================
+   LEFT PANEL
+   ============================================================ */
 .left-panel {
   width: 500px;
   flex-shrink: 0;
@@ -110,9 +116,11 @@ header h1 {
   color: var(--accent);
   text-transform: uppercase;
 }
-.header-actions { display: flex; gap: 6px; }
+.header-actions { display: flex; gap: 6px; align-items: center; }
 
-/* INPUTS & BUTTONS */
+/* ============================================================
+   INPUTS & BUTTONS
+   ============================================================ */
 .scramble-row { display: flex; gap: 8px; }
 
 input[type=text] {
@@ -156,7 +164,12 @@ input[type=text]:focus { border-color: var(--accent); }
 .btn.danger { border-color: var(--border); color: #aaa; }
 .btn.danger:hover { background: #333; color: #fff; border-color: #333; }
 
-/* COLOR PALETTE */
+/* Desktop scan button visible on desktop, hidden on mobile (mobile uses tab bar) */
+.scan-desktop-btn { display: inline-flex; }
+
+/* ============================================================
+   COLOR PALETTE
+   ============================================================ */
 .color-palette {
   display: flex;
   gap: 8px;
@@ -190,7 +203,9 @@ input[type=text]:focus { border-color: var(--accent); }
   text-transform: uppercase;
 }
 
-/* FACE NET */
+/* ============================================================
+   FACE NET
+   ============================================================ */
 .face-net-wrapper { display: flex; justify-content: center; }
 .face-net {
   display: grid;
@@ -223,7 +238,9 @@ input[type=text]:focus { border-color: var(--accent); }
 .facelet.center { cursor: default; }
 .facelet.center::after { content: ''; position: absolute; inset: 25%; border-radius: 50%; background: rgba(0,0,0,0.3); }
 
-/* SOLUTION BOX */
+/* ============================================================
+   SOLUTION BOX
+   ============================================================ */
 #solution-box {
   background: #000;
   border: 1px solid var(--border);
@@ -256,7 +273,9 @@ input[type=text]:focus { border-color: var(--accent); }
 .move-token.current { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 700; }
 .move-token.done { opacity: 0.3; }
 
-/* PLAYBACK */
+/* ============================================================
+   PLAYBACK
+   ============================================================ */
 .playback-controls { display: flex; justify-content: space-between; margin-bottom: 12px; gap: 8px; }
 .playback-controls .btn { flex: 1; text-align: center; }
 .step-counter { font-size: 0.7rem; color: var(--muted); }
@@ -277,7 +296,9 @@ input[type=range]::-webkit-slider-thumb {
   border-radius: 50%; background: var(--accent); cursor: pointer;
 }
 
-/* RIGHT PANEL */
+/* ============================================================
+   RIGHT PANEL / 3D CANVAS
+   ============================================================ */
 .right-panel { flex: 1; position: relative; overflow: hidden; display: flex; flex-direction: column; }
 #three-canvas { flex: 1; display: block; width: 100%; cursor: grab; }
 #three-canvas:active { cursor: grabbing; }
@@ -307,12 +328,18 @@ input[type=range]::-webkit-slider-thumb {
 @keyframes spin { to { transform: rotate(360deg); } }
 .loading-text { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 3px; color: var(--accent); }
 
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: #555; }
 
-/* Hidden on desktop, shown only in mobile media query */
+/* ============================================================
+   MOBILE TAB BAR
+   ============================================================ */
+/* Hidden on desktop, shown in mobile media query */
 .setup-solve-btn { display: none; }
 
 .mobile-tab-bar {
@@ -351,15 +378,325 @@ input[type=range]::-webkit-slider-thumb {
 .m-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
 .m-tab.active svg { opacity: 1; }
 
-/* =============================================
+/* Scan tab — subtle camera highlight when tapped */
+.m-tab--scan:active { color: #7ecfff; }
+.m-tab--scan:active svg { opacity: 1; stroke: #7ecfff; }
+
+/* ============================================================
+   CAMERA SCANNER OVERLAY
+   ============================================================ */
+#scanner-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #050505;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Space Mono', monospace;
+  color: var(--text);
+  /* slide up animation */
+  animation: scannerSlideUp 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes scannerSlideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ── Scanner header ── */
+#scanner-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(5,5,5,0.95);
+  backdrop-filter: blur(10px);
+}
+#scanner-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 4px;
+  color: var(--accent);
+}
+#scanner-close {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  padding: 7px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+#scanner-close:hover { border-color: var(--accent); color: var(--accent); }
+#scanner-close:active { opacity: 0.6; }
+
+/* ── Scanner body ── */
+#scanner-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 16px;
+  overflow: hidden;
+}
+
+/* ── Viewfinder ── */
+#scanner-viewfinder {
+  position: relative;
+  width: min(76vw, 320px);
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  /* double ring: white inner + subtle glow outer */
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 4px rgba(255,255,255,0.08),
+    0 8px 40px rgba(0,0,0,0.7);
+  flex-shrink: 0;
+}
+
+#scanner-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+#scanner-canvas { display: none; }
+
+/* ── 3×3 grid overlay ── */
+#scanner-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  pointer-events: none;
+}
+
+.sg-cell {
+  border: 1px solid rgba(255,255,255,0.20);
+  position: relative;
+  transition: background 0.2s;
+}
+
+/* Corner accent lines (top-left & bottom-right) */
+#scanner-grid::before,
+#scanner-grid::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: #fff;
+  border-style: solid;
+  border-width: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+#scanner-grid::before {
+  top: 6px; left: 6px;
+  border-top-width: 3px;
+  border-left-width: 3px;
+  border-radius: 2px 0 0 0;
+}
+#scanner-grid::after {
+  bottom: 6px; right: 6px;
+  border-bottom-width: 3px;
+  border-right-width: 3px;
+  border-radius: 0 0 2px 0;
+}
+
+/* Color dot shown in center of each cell */
+.sg-cell .color-dot {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(0,0,0,0.45);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.55);
+  background: #222;
+  transition: background 0.18s;
+}
+
+/* Face key label inside each cell */
+.sg-cell .face-label {
+  position: absolute;
+  bottom: 3px;
+  right: 5px;
+  font-size: 0.5rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.75);
+  text-shadow: 0 1px 3px #000;
+  letter-spacing: 1px;
+}
+
+/* ── Face selector pills ── */
+#face-selector {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.fs-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.fs-btn .fs-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid rgba(0,0,0,0.3);
+  flex-shrink: 0;
+}
+.fs-btn.selected  { border-color: #fff; color: #fff; }
+.fs-btn.done-face { opacity: 0.45; }
+.fs-btn:active    { opacity: 0.65; }
+
+/* ── Instruction line ── */
+#scanner-instruction {
+  font-size: 0.6rem;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.65;
+  padding: 0 8px;
+}
+
+/* ── Progress dots ── */
+#scanner-progress {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.sp-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid #3a3a3a;
+  background: #111;
+  transition: all 0.2s;
+}
+.sp-dot.done   { background: #fff; border-color: #fff; }
+.sp-dot.active {
+  background: transparent;
+  border-color: #fff;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.25);
+}
+
+/* ── Action buttons ── */
+#scanner-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+#btn-capture {
+  flex: 1;
+  height: 50px;
+  border-radius: 6px;
+  cursor: pointer;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #000;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  transition: opacity 0.15s, background 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+#btn-capture:active { opacity: 0.7; }
+#btn-capture.apply-mode {
+  background: #7ecfff;
+  border-color: #7ecfff;
+}
+
+#btn-retake {
+  flex: 0 0 auto;
+  height: 50px;
+  padding: 0 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+#btn-retake:hover  { border-color: #555; color: #aaa; }
+#btn-retake:active { opacity: 0.6; }
+
+/* ── Error banner ── */
+#scanner-error {
+  display: none;
+  width: 100%;
+  background: rgba(255, 50, 50, 0.10);
+  border: 1px solid rgba(255, 50, 50, 0.35);
+  color: #ff8888;
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  padding: 8px 14px;
+  text-align: center;
+  line-height: 1.55;
+}
+#scanner-error.visible { display: block; }
+
+/* ── Scan-success flash on viewfinder ── */
+#scanner-viewfinder.captured::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.18);
+  animation: captureFlash 0.35s ease-out forwards;
+  pointer-events: none;
+  z-index: 10;
+}
+@keyframes captureFlash {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ============================================================
    MOBILE RESPONSIVE  ≤ 900px
-   ============================================= */
+   ============================================================ */
 @media (max-width: 900px) {
   body { height: 100dvh; overflow: hidden; }
 
   header { padding: 8px 14px; }
   header h1 { font-size: 1.2rem; letter-spacing: 2px; }
   .github-link span { display: none; }
+
+  /* Desktop scan button hidden on mobile */
+  .scan-desktop-btn { display: none; }
 
   .mobile-tab-bar { display: block; }
 
@@ -370,7 +707,7 @@ input[type=range]::-webkit-slider-thumb {
     min-height: 0;
   }
 
-  /* 3D viewer — taller panel */
+  /* 3D viewer */
   .right-panel {
     order: -1;
     flex: 0 0 260px;
@@ -394,7 +731,7 @@ input[type=range]::-webkit-slider-thumb {
   .section { display: none; }
   .section.m-visible { display: flex; }
 
-  /* ---- SETUP TAB: Scramble + Paint ---- */
+  /* ---- SETUP TAB ---- */
   .section[data-s="scramble"] { padding: 14px 14px 10px; }
 
   .scramble-row {
@@ -408,14 +745,10 @@ input[type=range]::-webkit-slider-thumb {
     font-size: 0.8rem;
     padding: 10px 12px;
   }
-  .scramble-row .btn {
-    height: 50px;
-    font-size: 0.8rem;
-  }
+  .scramble-row .btn { height: 50px; font-size: 0.8rem; }
 
   .section[data-s="paint"] { padding: 12px 14px 16px; }
 
-  /* Solve CTA at bottom of setup tab */
   .setup-solve-btn {
     display: flex;
     width: 100%;
@@ -432,7 +765,6 @@ input[type=range]::-webkit-slider-thumb {
     margin-bottom: 14px;
   }
   .color-swatch {
-    /* 7 swatches, fill the row */
     flex: 1;
     max-width: 46px;
     height: 46px;
@@ -447,7 +779,7 @@ input[type=range]::-webkit-slider-thumb {
 
   .btn.mini { min-height: 36px; padding: 6px 12px; font-size: 0.65rem; }
 
-  /* ---- SOLVE TAB: Solve + Playback ---- */
+  /* ---- SOLVE TAB ---- */
   .section[data-s="solve"] { padding: 14px 14px 10px; }
 
   #solve-btn {
@@ -482,6 +814,18 @@ input[type=range]::-webkit-slider-thumb {
   /* ---- FACELET TAB ---- */
   .section[data-s="facelet"] { padding: 14px 14px; }
   #facelet-string { height: 50px; font-size: 0.72rem; padding: 12px; }
+
+  /* ---- SCANNER OVERLAY on mobile ---- */
+  #scanner-body { gap: 12px; padding: 12px 14px; }
+
+  #scanner-viewfinder {
+    width: min(78vw, 300px);
+  }
+
+  #btn-capture { height: 54px; font-size: 0.85rem; }
+  #btn-retake  { height: 54px; }
+
+  .fs-btn { padding: 7px 10px; font-size: 0.58rem; }
 }
 
 @media (max-width: 380px) {
@@ -489,4 +833,7 @@ input[type=range]::-webkit-slider-thumb {
   header h1 { font-size: 1rem; }
   .color-swatch { height: 40px; }
   .scramble-row .btn { font-size: 0.7rem; }
+
+  #scanner-viewfinder { width: min(82vw, 280px); }
+  #btn-capture { font-size: 0.75rem; letter-spacing: 2px; }
 }
