@@ -768,8 +768,22 @@ function captureFace() {
   if (Object.keys(scannedFaces).length === 6) { applyScannedFaces(); return; }
   if (!sampledColors) { showError('Camera not ready.'); return; }
 
-  const adjusted = [...sampledColors];
+  let adjusted = [...sampledColors];
   adjusted[4] = selectedFace;
+
+  // L and R faces are scanned with the cube rotated rightward, which mirrors
+  // the horizontal axis vs what rubik-solver expects. Reverse each row for L and R.
+  if (selectedFace === 'L' || selectedFace === 'R') {
+    const mirrored = [];
+    for (let row = 0; row < 3; row++) {
+      mirrored.push(adjusted[row * 3 + 2]);
+      mirrored.push(adjusted[row * 3 + 1]);
+      mirrored.push(adjusted[row * 3 + 0]);
+    }
+    mirrored[4] = selectedFace; // keep center correct
+    adjusted = mirrored;
+  }
+
   scannedFaces[selectedFace] = adjusted;
 
   // Flash
