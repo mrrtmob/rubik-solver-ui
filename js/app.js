@@ -323,6 +323,7 @@ window.openScanner = function () {
   initScanner((faceletString) => {
     facelets = faceletString.split('');
     try { currentCube = Cube.fromString(faceletString); } catch { currentCube = null; }
+
     buildFaceNet(facelets, onPaint);
     updateFaceletStringInput(facelets);
     stopPlay();
@@ -331,9 +332,18 @@ window.openScanner = function () {
     updateStepCounter(-1, 0);
     updateProgress(-1, 0);
     resetThreeCubeState();
-    refreshThree();
+
+    // Switch tab first so the canvas is visible and laid out
     if (window.matchMedia('(max-width: 900px)').matches) {
       switchTab('setup');
     }
+
+    // Delay the 3D refresh so the canvas has time to reflow
+    // after the scanner overlay is removed from the DOM.
+    // Without this, setColorsFromString runs before the renderer
+    // knows the correct canvas size and renders the wrong frame.
+    setTimeout(() => {
+      refreshThree();
+    }, 80);
   });
 };
