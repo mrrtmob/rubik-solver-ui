@@ -331,19 +331,21 @@ window.openScanner = function () {
     clearSolutionBox();
     updateStepCounter(-1, 0);
     updateProgress(-1, 0);
-    resetThreeCubeState();
 
-    // Switch tab first so the canvas is visible and laid out
+    // Switch tab first so canvas is visible before we touch it
     if (window.matchMedia('(max-width: 900px)').matches) {
       switchTab('setup');
     }
 
-    // Delay the 3D refresh so the canvas has time to reflow
-    // after the scanner overlay is removed from the DOM.
-    // Without this, setColorsFromString runs before the renderer
-    // knows the correct canvas size and renders the wrong frame.
-    setTimeout(() => {
-      refreshThree();
-    }, 80);
+    // Wait 2 animation frames so the tab switch reflow completes,
+    // then reset the 3D cube geometry and repaint colors in the same tick.
+    // This prevents the 1-sticker wrong color caused by resetThreeCubeState()
+    // wiping colors that were applied by an earlier refreshThree() call.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        resetThreeCubeState(); // rebuilds cubies with default colors
+        refreshThree();        // immediately repaints from facelets
+      });
+    });
   });
 };
